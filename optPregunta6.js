@@ -29,3 +29,68 @@
     }
  *
  */
+
+const users = require('./data/users.json');
+const express = require('express');
+const fs = require('fs');
+
+const app = express();
+
+
+
+app.use(express.json());
+
+app.get('/api/users', (req, res) => {
+  res.send(users);
+}) 
+
+app.get('/api/users/:id', (req, res) => {
+  let user = users[req.params.id-1];
+
+  if (user) {
+    res.send(user);
+  } else {
+    res.status(404).send("Usuario no encontrado");
+  }
+
+}) 
+
+app.post('/api/user', (req, res) => {
+
+  if (!req.body || !req.body.id) {
+    res.status(400).send("El usuario enviado no es correcto");
+    return;
+  } 
+
+  let user = users.filter( (usr) => usr.id == req.body.id);
+
+  if (user.length != 0) {
+    res.status(400).send("El id ya fue utilizado por otro usuario");
+    return;
+  }
+
+  users[users.length] = req.body;
+  users.sort( (usr1, usr2) => usr1.id - usr2.id);
+
+  res.send("Usuario agregado correctamente");
+})
+
+app.put('/api/users/save', (req, res) => {
+  users.sort( (usr1, usr2) => usr1.id - usr2.id);
+
+  fs.writeFile('./data/users.json', JSON.stringify(users, null, 2), (err, result) => {
+    if (err) {
+      console.log('Cannot save the users file: ', err);
+      res.status(500).send('Error al guardar el archivo');
+      return;
+    }
+
+    res.send('Usuarios guardados correctamente');
+  });
+
+
+})
+
+app.listen(3000, () => {
+  console.log("El servidor esta inicializado.");
+})
