@@ -15,6 +15,19 @@
     { first: 'Max', last: 'Planck', year: 1858 },
   ];
 
+
+  function findInventor(inventor, inventors) {
+    let foundInventors = inventors.filter((inv) => inv.last == inventor);
+    let oneInventor;
+  
+    if (foundInventors.length == 1) {
+      oneInventor = foundInventors[0];
+    }
+  
+    return oneInventor;
+  }
+
+
   /**
    * Función que agrega descubrimientos en el array de inventors
    * @param {*} inventor 
@@ -22,11 +35,28 @@
    * @param {*} inventors 
    */
   function addDiscoveries(inventor, discoveries, inventors){
-      
+
+      let searchedInventor = findInventor(inventor, inventors);
+
+      if (searchedInventor) {
+
+        if (!searchedInventor.discoveries) {
+
+          searchedInventor.discoveries = discoveries;
+          
+        } else {
+          discoveries.forEach((discovery) => {
+            searchedInventor.discoveries[searchedInventor.discoveries.length] = discovery;
+          })
+        }
+      }
+
+      return inventors;
   }
 
   console.log(addDiscoveries('Einstein', 
   ['Teoría de la relatividad especial','Equivalencia entre masa y energía','Teoría de la relatividad general'], inventors
   ));
+
 
   

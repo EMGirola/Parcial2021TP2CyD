@@ -3,7 +3,26 @@
 // si la longitud del array es < 3 se debe retornar undefined
 
 const greater3 = nums => {
+    nums.sort((num1, num2) => num2 - num1);
+
+    let finalNum = undefined;
+    let repeatedNum = new Set();
+    let actNum = 0;
     
+    nums.forEach(num => {
+        
+   
+        if (!repeatedNum.has(num)) {
+            repeatedNum.add(num);
+            actNum++;
+
+            if (actNum == 3) {
+                finalNum = num;
+            }
+        }
+    });
+
+    return finalNum;
 }
 
 

@@ -20,3 +20,16 @@ const beers = [
     { name: 'Stolen Fruit', abv: 4.6, label: 'https://s3.amazonaws.com/brewerydbapi/beer/YGT30k/upload_uVCHP7-large.png', type: 'Wheat' },
 ];
 
+const oldEndpoint = 'https://s3.amazonaws.com/brewerydbapi/';
+const newEndpoint = 'https://tecnoshare.sharepoint.com/'
+let nameRegex = /upload_\w+-*\w+.png/i;
+
+beers.forEach((beer) => {
+  
+  let newName =  encodeURI(beer.name.toLowerCase() + '.png');
+  beer.label = beer.label.replace(oldEndpoint, newEndpoint)
+                .replace(nameRegex, newName);
+
+});
+
+console.log(beers);
